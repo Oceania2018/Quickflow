@@ -1,6 +1,7 @@
 ﻿using CustomEntityFoundation;
 using CustomEntityFoundation.Entities;
 using CustomEntityFoundation.Utilities;
+using EntityFrameworkCore.BootKit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;

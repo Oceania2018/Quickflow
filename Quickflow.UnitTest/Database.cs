@@ -1,14 +1,20 @@
 ﻿using CustomEntityFoundation;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Quickflow.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Quickflow.UnitTest
 {
-    public class Database
+    public abstract class Database
     {
-        public static EntityDbContext GetDatabase()
+        protected EntityDbContext dc { get; set; }
+
+        public Database()
         {
             EntityDbContext.Assembles = new String[] { "Quickflow.Core", "Quickflow.ActivityRepository" };
             var options = new DatabaseOptions
@@ -18,13 +24,18 @@ namespace Quickflow.UnitTest
 
             // Sqlite
             options.Database = "Sqlite";
-            options.ConnectionString = "Data Source=|DataDirectory|\\Voicecoin.db";
+            options.ConnectionString = "Data Source=|DataDirectory|\\quickflow.db";
             EntityDbContext.Options = options;
 
-            var dc = new EntityDbContext();
+            dc = new EntityDbContext();
             dc.InitDb();
 
-            return dc;
+            dc.DbTran(() => InitTestData());
+        }
+
+        private void InitTestData()
+        {
+            new Quickflow.Core.HookDbInitializer().Load(null, dc);
         }
     }
 }

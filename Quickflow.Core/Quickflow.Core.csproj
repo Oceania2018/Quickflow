@@ -2,11 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Haiping Chen</Authors>
+    <Company>Personal</Company>
+    <PackageProjectUrl>https://github.com/Haiping-Chen/Quickflow</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Haiping-Chen/Quickflow</RepositoryUrl>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageTags>Workflow Core CustomEntityFoundation</PackageTags>
+    <Product>Quickflow</Product>
+    <Version>1.2.0</Version>
+    <PackageReleaseNotes>Added expression evaluation class.</PackageReleaseNotes>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CustomEntityFoundation" Version="1.0.0" />
-    <PackageReference Include="EntityFrameworkCore.BootKit" Version="1.0.0" />
+    <PackageReference Include="CustomEntityFoundation" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

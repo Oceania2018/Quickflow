@@ -1,4 +1,5 @@
 ﻿using CustomEntityFoundation.Entities;
+using EntityFrameworkCore.BootKit;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

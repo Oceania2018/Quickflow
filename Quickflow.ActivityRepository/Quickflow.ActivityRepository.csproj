@@ -2,10 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/Haiping-Chen/Quickflow</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Haiping-Chen/Quickflow</RepositoryUrl>
+    <Authors>Haiping Chen</Authors>
+    <Company>Personal</Company>
+    <Product>Quickflow</Product>
+    <PackageTags>Quickflow CustomEntityFoundation Workflow</PackageTags>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Description>Quickflow activity repository. Integrated with CustomEntityFoundation.</Description>
+    <Version>1.2.0</Version>
+    <PackageReleaseNotes>Added DecisionActivity and OutputActivity.</PackageReleaseNotes>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.6" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.6.1" />
   </ItemGroup>
 
   <ItemGroup>

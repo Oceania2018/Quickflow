@@ -62,6 +62,7 @@ namespace Quickflow.Core
                     }
 
                     dc.Table<Workflow>().Add(workflow);
+
                 }
 
             });

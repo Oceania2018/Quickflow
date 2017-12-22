@@ -1,0 +1,40 @@
+﻿{
+  "workflows": [
+    {
+      "id": "db2f768c-f6f1-41e1-a869-c3c9e587ea74",
+      "name": "Workflow Unit Test",
+      "description": "For test purpose only",
+      "rootActivityId": "3d7e0ec9-80e1-4374-a5aa-b11593edd9f1",
+      "activities": [
+        {
+          "id": "3d7e0ec9-80e1-4374-a5aa-b11593edd9f1",
+          "activityName": "DecisionActivity",
+          "nextActivityId": "",
+          "configuration": {
+            "963c728b-c25d-461e-98ec-a62407232035": "Input.Name=='Haiping Chen'",
+            "a25ea38c-ee44-4acc-8bdf-a8e83c133803": "Input.Name=='Hongping Hu'"
+          }
+        },
+		
+		{
+          "id": "963c728b-c25d-461e-98ec-a62407232035",
+          "activityName": "OutputActivity",
+          "nextActivityId": "",
+          "configuration": {
+            "Text": "This is Haiping Chen."
+          }
+        },
+		
+		{
+          "id": "a25ea38c-ee44-4acc-8bdf-a8e83c133803",
+          "activityName": "OutputActivity",
+          "nextActivityId": "",
+          "configuration": {
+            "Text": "This is Hongping Hu."
+          }
+        }
+		
+      ]
+    }
+  ]
+}

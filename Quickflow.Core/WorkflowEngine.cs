@@ -46,6 +46,12 @@ namespace Quickflow.Core
                 DateTime start = DateTime.Now;
                 var type = types.FirstOrDefault(x => x.Name.Equals(activity.ActivityName, StringComparison.CurrentCultureIgnoreCase));
 
+                if(type == null)
+                {
+                    Console.WriteLine($"Can't find activity: {activity.ActivityName}");
+                    return;
+                }
+
                 var instance = (IWorkflowActivity)Activator.CreateInstance(type);
 
                 activity.Output = new ActivityResult();
