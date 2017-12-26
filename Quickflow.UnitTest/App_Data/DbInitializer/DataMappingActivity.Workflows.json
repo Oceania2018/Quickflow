@@ -1,0 +1,19 @@
+﻿{
+  "workflows": [
+    {
+      "id": "3bf71bdb-254d-4ad0-9de4-a64dcfe47770",
+      "name": "DataMappingActivity Test",
+      "description": "For test purpose only",
+      "rootActivityId": "3755f0d3-3fac-4db1-a267-43c3b5e1a6e0",
+      "activities": [
+        {
+          "id": "3755f0d3-3fac-4db1-a267-43c3b5e1a6e0",
+          "activityName": "DataMappingActivity",
+          "configuration": {
+            "template": "\\Templates\\UserRegisterDataMapping.cshtml"
+          }
+        }
+      ]
+    }
+  ]
+}

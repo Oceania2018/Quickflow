@@ -19,7 +19,7 @@ namespace Quickflow.UnitTest
             EntityDbContext.Assembles = new String[] { "Quickflow.Core", "Quickflow.ActivityRepository" };
             var options = new DatabaseOptions
             {
-                ContentRootPath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\..",
+                ContentRootPath = Directory.GetCurrentDirectory() + "\\..\\..\\..",
             };
 
             // Sqlite

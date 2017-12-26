@@ -18,8 +18,8 @@ namespace Quickflow.ActivityRepository.CustomEntityFoundation
         public Task Run(EntityDbContext dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {
             var bundle = dc.Bundle.Include(x => x.Fields).FirstOrDefault(x => x.Id == activity.GetOptionValue("bundleId"));
-            activity.Output.Data = bundle.AddRecord(dc, JObject.FromObject(activity.Input));
-
+            var entity = bundle.AddRecord(dc, JObject.FromObject(activity.Input.Data));
+            activity.Output.Data = entity.ToBusinessObject(dc, bundle.EntityName);
             return Task.CompletedTask;
         }
     }

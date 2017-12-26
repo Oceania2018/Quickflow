@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Quickflow.Core;
 using Quickflow.Core.Entities;
 using Quickflow.Core.Interfacess;
+using RazorLight;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,9 +31,12 @@ namespace Quickflow.ActivityRepository
 
             if (!String.IsNullOrEmpty(model.Template))
             {
-                model.Body = File.ReadAllText(EntityDbContext.Options.ContentRootPath + "\\App_Data" + model.Template);
-                //var engine = RazorLight.EngineFactory.CreatePhysical(EntityDbContext.Options.ContentRootPath + "\\App_Data\\Templates");
-                //model.Body = engine.Parse(model.Body, new Workflow { });
+                var engine = new RazorLightEngineBuilder()
+                  .UseFilesystemProject(EntityDbContext.Options.ContentRootPath + "\\App_Data")
+                  .UseMemoryCachingProvider()
+                  .Build();
+
+                model.Body = await engine.CompileRenderAsync(model.Template, activity.Input.Data);
             }
 
             activity.Output.Data = await Send(model, EntityDbContext.Configuration);

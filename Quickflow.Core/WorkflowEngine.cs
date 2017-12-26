@@ -15,8 +15,10 @@ namespace Quickflow.Core
     {
         public String WorkflowId { get; set; }
 
-        public async Task Run<TInput>(EntityDbContext dc, TInput input)
+        public async Task<Object> Run<TInput>(EntityDbContext dc, TInput input)
         {
+            DateTime dtStart = DateTime.UtcNow;
+
             var workflow = dc.Table<Workflow>()
                             .Include(x => x.Activities).ThenInclude(x => x.Options)
                             .FirstOrDefault(x => x.Id == WorkflowId);
@@ -33,9 +35,8 @@ namespace Quickflow.Core
 
             ActivityInWorkflow preActivity = null;
             ActivityInWorkflow activity = workflow.Activities.First();
-            activity.Input = input;
+            activity.Input = new ActivityResult { Data = input };
             
-
             int step = 1;
             while (activity != null)
             {
@@ -49,7 +50,7 @@ namespace Quickflow.Core
                 if(type == null)
                 {
                     Console.WriteLine($"Can't find activity: {activity.ActivityName}");
-                    return;
+                    return null;
                 }
 
                 var instance = (IWorkflowActivity)Activator.CreateInstance(type);
@@ -83,6 +84,10 @@ namespace Quickflow.Core
                     activity.Input = preActivity.Output;
                 }
             }
+
+            Console.WriteLine($"------ {workflow.Name.ToUpper()} Completed in {(DateTime.UtcNow - dtStart).TotalSeconds}s ------");
+
+            return preActivity?.Output?.Data;
         }
 
         private void ConstructActivityLinkedlist(Workflow workflow)

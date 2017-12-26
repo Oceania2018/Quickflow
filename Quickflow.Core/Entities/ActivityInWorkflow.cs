@@ -41,7 +41,7 @@ namespace Quickflow.Core.Entities
         public JObject Configuration { get; set; }
 
         [NotMapped]
-        public Object Input { get; set; }
+        public ActivityResult Input { get; set; }
 
         [NotMapped]
         public ActivityResult Output { get; set; }

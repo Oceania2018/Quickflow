@@ -1,0 +1,21 @@
+﻿{
+  "workflows": [
+    {
+      "id": "e637ca76-e230-47dc-a0e7-3219519f4d87",
+      "name": "EmailInAwsActivity Test",
+      "description": "For test purpose only",
+      "rootActivityId": "183b5e36-e26d-4635-8269-58139c66cf2e",
+      "activities": [
+        {
+          "id": "183b5e36-e26d-4635-8269-58139c66cf2e",
+          "activityName": "EmailInAwsActivity",
+          "configuration": {
+            "subject": "Account Activation",
+            "toAddresses": "@Input.Email",
+            "template": "\\Templates\\UserRegisterValidation.cshtml"
+          }
+        }
+      ]
+    }
+  ]
+}

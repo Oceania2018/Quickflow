@@ -23,8 +23,6 @@ namespace Quickflow.RestApi
         [HttpPost("run/{workflowId}")]
         public async Task<string> Run([FromRoute] string workflowId, [FromBody] JObject data)
         {
-            DateTime startWf = DateTime.Now;
-
             var dc = new EntityDbContext();
             dc.InitDb();
 
@@ -35,13 +33,8 @@ namespace Quickflow.RestApi
                 await wf.Run(dc, data);
             });
 
-            Console.WriteLine("");
-            Console.WriteLine($"------ {workflowId.ToUpper()} spent {(DateTime.Now - startWf).TotalSeconds}s ------");
-
             return dc.TransactionId;
         }
-
-        
     }
 
 }
