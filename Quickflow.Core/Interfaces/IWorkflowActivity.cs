@@ -1,4 +1,4 @@
-﻿using CustomEntityFoundation;
+﻿using EntityFrameworkCore.BootKit;
 using Quickflow.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,6 @@ namespace Quickflow.Core.Interfacess
         /// <param name="activity">current activity</param>
         /// <param name="preActivity">previous acivity</param>
         /// <returns></returns>
-        Task Run(EntityDbContext dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity);
+        Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity);
     }
 }

@@ -1,40 +1,18 @@
-﻿using CustomEntityFoundation;
+﻿using EntityFrameworkCore.BootKit;
+using Newtonsoft.Json.Linq;
+using Quickflow.Core.Entities;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-using Newtonsoft.Json.Linq;
 using System.Linq;
-using Newtonsoft.Json;
-using Quickflow.Core.Entities;
+using System.Text;
 
-namespace Quickflow.Core
+namespace Quickflow.Core.Utilities
 {
-    public class HookDbInitializer : IHookDbInitializer
+    public class DataInitialization
     {
-        public int Priority => 100;
-
-        public void Load(IConfiguration config, EntityDbContext dc)
+        public static void InitWorkflows(Database dc, List<JToken> jWorkflows)
         {
-            Directory.GetFiles(EntityDbContext.Options.ContentRootPath + "\\App_Data\\DbInitializer", "*.Workflows.json")
-                .ToList()
-                .ForEach(path =>
-                {
-                    string json = File.ReadAllText(path);
-                    var dbContent = JsonConvert.DeserializeObject<JObject>(json);
-
-                    if (dbContent["workflows"] != null)
-                    {
-                        InitWorkflows(dc, dbContent["workflows"].ToList());
-                    }
-
-                });
-        }
-
-        private void InitWorkflows(EntityDbContext dc, List<JToken> jBundles)
-        {
-            jBundles.ToList().ForEach(bundle =>
+            jWorkflows.ToList().ForEach(bundle =>
             {
                 var workflow = bundle.ToObject<Workflow>();
 

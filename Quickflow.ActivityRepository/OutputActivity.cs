@@ -1,4 +1,4 @@
-﻿using CustomEntityFoundation;
+﻿using EntityFrameworkCore.BootKit;
 using Newtonsoft.Json;
 using Quickflow.Core;
 using Quickflow.Core.Entities;
@@ -12,7 +12,7 @@ namespace Quickflow.ActivityRepository
 {
     public class OutputActivity : IWorkflowActivity
     {
-        public async Task Run(EntityDbContext dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
+        public async Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {
             activity.Output.Data = activity.Input.Data;
             Console.WriteLine(activity.GetOptionValue("text"));

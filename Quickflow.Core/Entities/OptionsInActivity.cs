@@ -1,5 +1,4 @@
-﻿using CustomEntityFoundation.Entities;
-using EntityFrameworkCore.BootKit;
+﻿using EntityFrameworkCore.BootKit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +6,7 @@ using System.Text;
 
 namespace Quickflow.Core.Entities
 {
-    public class OptionsInActivity : Entity, IDbRecord
+    public class OptionsInActivity : DbRecord, IDbRecord
     {
         public override string ToString()
         {

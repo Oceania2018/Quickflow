@@ -10,14 +10,15 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageTags>Workflow Core CustomEntityFoundation</PackageTags>
     <Product>Quickflow</Product>
-    <Version>1.2.1</Version>
-    <PackageReleaseNotes>Added return value for run method.</PackageReleaseNotes>
-    <AssemblyVersion>1.2.1.0</AssemblyVersion>
-    <FileVersion>1.2.1.0</FileVersion>
+    <Version>1.3.0</Version>
+    <PackageReleaseNotes>Remove CEF dependency.</PackageReleaseNotes>
+    <AssemblyVersion>1.3.0.0</AssemblyVersion>
+    <FileVersion>1.3.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CustomEntityFoundation" Version="2.2.0" />
+    <PackageReference Include="EntityFrameworkCore.BootKit" Version="1.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
 </Project>

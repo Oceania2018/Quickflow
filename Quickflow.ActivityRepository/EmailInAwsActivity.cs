@@ -1,7 +1,7 @@
 ﻿using Amazon.Runtime;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
-using CustomEntityFoundation;
+using EntityFrameworkCore.BootKit;
 using Microsoft.Extensions.Configuration;
 using Quickflow.Core;
 using Quickflow.Core.Entities;
@@ -18,7 +18,7 @@ namespace Quickflow.ActivityRepository
 {
     public class EmailInAwsActivity : IWorkflowActivity
     {
-        public async Task Run(EntityDbContext dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
+        public async Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {
             EmailRequestModel model = new EmailRequestModel();
 
@@ -32,20 +32,25 @@ namespace Quickflow.ActivityRepository
             if (!String.IsNullOrEmpty(model.Template))
             {
                 var engine = new RazorLightEngineBuilder()
-                  .UseFilesystemProject(EntityDbContext.Options.ContentRootPath + "\\App_Data")
+                  .UseFilesystemProject(WorkflowEngine.ContentRootPath + "\\App_Data")
                   .UseMemoryCachingProvider()
                   .Build();
 
                 model.Body = await engine.CompileRenderAsync(model.Template, activity.Input.Data);
             }
 
-            activity.Output.Data = await Send(model, EntityDbContext.Configuration);
+            var ses = new SesEmailConfig
+            {
+                VerifiedEmail = WorkflowEngine.Configuration.GetSection("AWS:SESVerifiedEmail").Value,
+                AWSSecretKey = WorkflowEngine.Configuration.GetSection("AWS:AWSSecretKey").Value,
+                AWSAccessKey = WorkflowEngine.Configuration.GetSection("AWS:AWSAccessKey").Value
+            };
+
+            activity.Output.Data = await Send(model, ses);
         }
 
-        private SendEmailRequest PrepareEmailRequest(EmailRequestModel model, IConfiguration config)
+        private SendEmailRequest PrepareEmailRequest(EmailRequestModel model, String from)
         {
-            String from = config.GetSection("AWS:SESVerifiedEmail").Value;
-
             // Construct an object to contain the recipient address.
             Destination destination = new Destination();
             destination.ToAddresses = model.ToAddresses.Split(',').Select(x => x.Trim()).ToList();
@@ -72,11 +77,8 @@ namespace Quickflow.ActivityRepository
             return new SendEmailRequest(from, destination, message);
         }
 
-        private AmazonSimpleEmailServiceClient PrepareEmailClient(EmailRequestModel model, IConfiguration config)
+        private AmazonSimpleEmailServiceClient PrepareEmailClient(EmailRequestModel model, SesEmailConfig config)
         {
-            string awsSecretAccessKey = config.GetSection("AWS:AWSSecretKey").Value;
-            string awsAccessKeyId = config.GetSection("AWS:AWSAccessKey").Value;
-
             // Choose the AWS region of the Amazon SES endpoint you want to connect to. Note that your sandbox 
             // status, sending limits, and Amazon SES identity-related settings are specific to a given 
             // AWS region, so be sure to select an AWS region in which you set up Amazon SES. Here, we are using 
@@ -85,7 +87,7 @@ namespace Quickflow.ActivityRepository
             Amazon.RegionEndpoint REGION = Amazon.RegionEndpoint.USEast1;
 
             // Instantiate an Amazon SES client, which will make the service call.
-            AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(awsAccessKeyId, awsSecretAccessKey, REGION);
+            AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(config.AWSAccessKey, config.AWSSecretKey, REGION);
 
             client.BeforeRequestEvent += delegate (object sender, RequestEventArgs e)
             {
@@ -116,16 +118,15 @@ namespace Quickflow.ActivityRepository
             throw new NotImplementedException();
         }
 
-        private async Task<string> Send(EmailRequestModel model, IConfiguration config)
+        private async Task<string> Send(EmailRequestModel model, SesEmailConfig config)
         {
             if (String.IsNullOrEmpty(model.ToAddresses)) return String.Empty;
 
-            SendEmailRequest request = PrepareEmailRequest(model, config);
+            SendEmailRequest request = PrepareEmailRequest(model, config.VerifiedEmail);
             model.From = request.Source;
 
             AmazonSimpleEmailServiceClient client = PrepareEmailClient(model, config);
 
-            // Convert.ToBase64String()
             SendEmailResponse response = await client.SendEmailAsync(request);
             return response.MessageId;
         }
@@ -145,6 +146,13 @@ namespace Quickflow.ActivityRepository
             /// Template file name
             /// </summary>
             public string Template { get; set; }
+        }
+
+        private class SesEmailConfig
+        {
+            public String VerifiedEmail { get; set; }
+            public String AWSSecretKey { get; set; }
+            public String AWSAccessKey { get; set; }
         }
     }
 }

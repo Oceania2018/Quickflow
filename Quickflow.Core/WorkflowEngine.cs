@@ -1,9 +1,10 @@
-﻿using CustomEntityFoundation;
-using CustomEntityFoundation.Utilities;
+﻿using EntityFrameworkCore.BootKit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Quickflow.Core.Entities;
 using Quickflow.Core.Interfacess;
+using Quickflow.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,12 @@ namespace Quickflow.Core
     public class WorkflowEngine
     {
         public String WorkflowId { get; set; }
+        public String TransactionId { get; set; }
+        public static String[] Assembles { get; set; }
+        public static IConfiguration Configuration { get; set; }
+        public static string ContentRootPath { get; set; }
 
-        public async Task<Object> Run<TInput>(EntityDbContext dc, TInput input)
+        public async Task<ActivityResult> Run<TInput>(Database dc, TInput input)
         {
             DateTime dtStart = DateTime.UtcNow;
 
@@ -25,13 +30,13 @@ namespace Quickflow.Core
 
             Console.WriteLine("");
             Console.WriteLine("");
-            Console.WriteLine($"------ {workflow.Name.ToUpper()}, TRACEID: {dc.TransactionId} ------");
+            Console.WriteLine($"------ {workflow.Name.ToUpper()}, TRACEID: {TransactionId} ------");
             Console.WriteLine($"{workflow.Description}");
             Console.WriteLine("");
 
             ConstructActivityLinkedlist(workflow);
 
-            var types = TypeHelper.GetClassesWithInterface<IWorkflowActivity>(EntityDbContext.Assembles);
+            var types = TypeHelper.GetClassesWithInterface<IWorkflowActivity>(Assembles);
 
             ActivityInWorkflow preActivity = null;
             ActivityInWorkflow activity = workflow.Activities.First();
@@ -87,7 +92,7 @@ namespace Quickflow.Core
 
             Console.WriteLine($"------ {workflow.Name.ToUpper()} Completed in {(DateTime.UtcNow - dtStart).TotalSeconds}s ------");
 
-            return preActivity?.Output?.Data;
+            return preActivity?.Output;
         }
 
         private void ConstructActivityLinkedlist(Workflow workflow)

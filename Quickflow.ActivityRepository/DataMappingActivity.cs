@@ -1,4 +1,4 @@
-﻿using CustomEntityFoundation;
+﻿using EntityFrameworkCore.BootKit;
 using Newtonsoft.Json.Linq;
 using Quickflow.Core;
 using Quickflow.Core.Entities;
@@ -13,12 +13,12 @@ namespace Quickflow.ActivityRepository
 {
     public class DataMappingActivity : IWorkflowActivity
     {
-        public async Task Run(EntityDbContext dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
+        public async Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {
             var template = activity.GetOptionValue("Template");
 
             var engine = new RazorLightEngineBuilder()
-              .UseFilesystemProject(EntityDbContext.Options.ContentRootPath + "\\App_Data")
+              .UseFilesystemProject(WorkflowEngine.ContentRootPath + "\\App_Data")
               .UseMemoryCachingProvider()
               .Build();
 

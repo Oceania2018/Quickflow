@@ -1,4 +1,4 @@
-﻿using CustomEntityFoundation;
+﻿using EntityFrameworkCore.BootKit;
 using Newtonsoft.Json;
 using Quickflow.Core;
 using Quickflow.Core.Entities;
@@ -13,9 +13,9 @@ namespace Quickflow.ActivityRepository
 {
     public class RestClientActivity : IWorkflowActivity
     {
-        public async Task Run(EntityDbContext dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
+        public async Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {
-            string baseUrl = EntityDbContext.Configuration.GetSection(activity.GetOptionValue("baseUrl")).Value;
+            string baseUrl = WorkflowEngine.Configuration.GetSection(activity.GetOptionValue("baseUrl")).Value;
             string resource = activity.GetOptionValue("resource");
 
             var client = new RestClient(baseUrl);

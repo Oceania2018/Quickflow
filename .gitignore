@@ -290,3 +290,4 @@ __pycache__/
 /App_Data/Templates/UserRegisterValidation.cshtml
 /App_Data/quickflow.db
 /Quickflow.UnitTest/App_Data/quickflow.db
+/App_Data/bootkit.db
