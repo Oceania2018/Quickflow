@@ -25,10 +25,22 @@ namespace Quickflow.Core.Entities
         public String ActivityName { get; set; }
 
         /// <summary>
+        /// Activity extra flag
+        /// </summary>
+        [NotMapped]
+        public int Flag { get; set; }
+
+        /// <summary>
         /// NextWorkflowActivityId
         /// </summary>
         [StringLength(36)]
         public String NextActivityId { get; set; }
+
+        /// <summary>
+        /// Originaal NextWorkflowActivityId
+        /// </summary>
+        [NotMapped]
+        public String OriginNextActivityId { get; set; }
 
         [ForeignKey("WorkflowActivityId")]
         public List<OptionsInActivity> Options { get; set; }
@@ -41,6 +53,9 @@ namespace Quickflow.Core.Entities
 
         [NotMapped]
         public ActivityResult Input { get; set; }
+
+        [NotMapped]
+        public ActivityResult OriginInput { get; set; }
 
         [NotMapped]
         public ActivityResult Output { get; set; }

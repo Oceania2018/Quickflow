@@ -21,7 +21,7 @@ namespace Quickflow.RestApi
         
         public WorkflowController()
         {
-            var dc = new Database();
+            dc = new Database();
 
             string db = WorkflowEngine.Configuration.GetSection("Database:Default").Value;
             string connectionString = WorkflowEngine.Configuration.GetSection("Database:ConnectionStrings")[db];

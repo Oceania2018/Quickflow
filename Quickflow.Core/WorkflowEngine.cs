@@ -28,6 +28,12 @@ namespace Quickflow.Core
                             .Include(x => x.Activities).ThenInclude(x => x.Options)
                             .FirstOrDefault(x => x.Id == WorkflowId);
 
+            if(workflow == null)
+            {
+                Console.WriteLine($"Can't find workflow {WorkflowId}");
+                return null;
+            }
+
             Console.WriteLine("");
             Console.WriteLine("");
             Console.WriteLine($"------ {workflow.Name.ToUpper()}, TRACEID: {TransactionId} ------");
@@ -43,6 +49,11 @@ namespace Quickflow.Core
             activity.Input = new ActivityResult { Data = input };
             
             int step = 1;
+            /*dc.DbTran(() => {
+
+
+            });*/
+
             while (activity != null)
             {
                 Console.WriteLine("");
@@ -55,12 +66,17 @@ namespace Quickflow.Core
                 if(type == null)
                 {
                     Console.WriteLine($"Can't find activity: {activity.ActivityName}");
-                    return null;
                 }
 
                 var instance = (IWorkflowActivity)Activator.CreateInstance(type);
 
                 activity.Output = new ActivityResult();
+
+                // Keep original NextActivityId
+                if (String.IsNullOrEmpty(activity.OriginNextActivityId))
+                {
+                    activity.OriginNextActivityId = activity.NextActivityId;
+                }
 
                 try
                 {
@@ -73,12 +89,12 @@ namespace Quickflow.Core
                         activity.Output.ErrorMessage = ex.Message;
                     }
 
+                    Console.WriteLine($"{activity.Output.ErrorMessage}");
                     throw ex;
                 }
 
                 Console.WriteLine("");
                 Console.WriteLine($"{activity.ActivityName} spent {(DateTime.Now - start).TotalMilliseconds}ms");
-                Console.WriteLine($"{activity.Output.ErrorMessage}");
                 Console.WriteLine($"{JsonConvert.SerializeObject(activity.Output.Data)}");
 
                 preActivity = activity;
@@ -87,10 +103,26 @@ namespace Quickflow.Core
                 if(activity != null)
                 {
                     activity.Input = preActivity.Output;
+
+                    // keep original input
+                    if (activity.OriginInput == null)
+                    {
+                        activity.OriginInput = activity.Input;
+                    }
                 }
             }
 
             Console.WriteLine($"------ {workflow.Name.ToUpper()} Completed in {(DateTime.UtcNow - dtStart).TotalSeconds}s ------");
+
+            // clean wf context
+            workflow.Activities.ForEach(a =>
+            {
+                a.Input = null;
+                a.Output = null;
+                a.Flag = 0;
+                a.OriginInput = null;
+                a.OriginNextActivityId = null;
+            });
 
             return preActivity?.Output;
         }
