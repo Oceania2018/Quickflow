@@ -49,10 +49,6 @@ namespace Quickflow.Core
             activity.Input = new ActivityResult { Data = input };
             
             int step = 1;
-            /*dc.DbTran(() => {
-
-
-            });*/
 
             while (activity != null)
             {
@@ -88,9 +84,14 @@ namespace Quickflow.Core
                     {
                         activity.Output.ErrorMessage = ex.Message;
                     }
+                }
 
+                // Halt workflow
+                if (!String.IsNullOrEmpty(activity.Output.ErrorMessage))
+                {
+                    activity.NextActivityId = "";
                     Console.WriteLine($"{activity.Output.ErrorMessage}");
-                    throw ex;
+                    throw new Exception($"{activity.Output.ErrorMessage}");
                 }
 
                 Console.WriteLine("");
@@ -113,16 +114,6 @@ namespace Quickflow.Core
             }
 
             Console.WriteLine($"------ {workflow.Name.ToUpper()} Completed in {(DateTime.UtcNow - dtStart).TotalSeconds}s ------");
-
-            // clean wf context
-            workflow.Activities.ForEach(a =>
-            {
-                a.Input = null;
-                a.Output = null;
-                a.Flag = 0;
-                a.OriginInput = null;
-                a.OriginNextActivityId = null;
-            });
 
             return preActivity?.Output;
         }

@@ -10,7 +10,7 @@
           "id": "3755f0d3-3fac-4db1-a267-43c3b5e1a6e0",
           "activityName": "DataMappingActivity",
           "configuration": {
-            "template": "\\Templates\\UserRegisterDataMapping.cshtml"
+            "template": "Templates\\UserRegisterDataMapping.cshtml"
           }
         }
       ]

@@ -19,14 +19,14 @@ namespace Quickflow.UnitTest
 
         public TestEssential()
         {
-            WorkflowEngine.ContentRootPath = $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\..\\App_Data";
+            WorkflowEngine.ContentRootPath = $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\..";
             WorkflowEngine.Assembles = new string[] { "Quickflow.Core", "Quickflow.ActivityRepository" };
 
             dc = new Database();
 
             dc.BindDbContext<IDbRecord, DbContext4Sqlite>(new DatabaseBind
             {
-                MasterConnection = new SqliteConnection($"Data Source={WorkflowEngine.ContentRootPath}\\bootkit.db"),
+                MasterConnection = new SqliteConnection($"Data Source={WorkflowEngine.ContentRootPath}\\App_Data\\bootkit.db"),
                 CreateDbIfNotExist = true,
                 AssemblyNames = WorkflowEngine.Assembles
             });
@@ -36,7 +36,7 @@ namespace Quickflow.UnitTest
 
         private void InitTestData()
         {
-            Directory.GetFiles(WorkflowEngine.ContentRootPath + "\\DbInitializer", "*.Workflows.json")
+            Directory.GetFiles(WorkflowEngine.ContentRootPath + "\\App_Data\\DbInitializer", "*.Workflows.json")
                 .ToList()
                 .ForEach(path =>
                 {
