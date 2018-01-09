@@ -62,5 +62,25 @@ namespace Quickflow.UnitTest
 
             Assert.IsTrue(jObject["ToAddresses"].ToString() == "haiping008@gmail.com");
         }
+
+        [TestMethod]
+        public void DbRecordUpdateActivityTest()
+        {
+            var wf = new WorkflowEngine
+            {
+                WorkflowId = "e256fef6-b0fa-4b25-85ef-635444d3826d",
+                TransactionId = Guid.NewGuid().ToString()
+            };
+            
+            dc.DbTran(() =>
+            {
+                var result = wf.Run(dc, new { Name = "Haiping", UpdatedTime = DateTime.UtcNow });
+
+                var jObject = JObject.FromObject(result.Result.Data);
+
+                Assert.IsTrue(jObject["Name"].ToString() == "Haiping");
+            });
+
+        }
     }
 }

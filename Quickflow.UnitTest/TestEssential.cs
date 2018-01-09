@@ -7,6 +7,7 @@ using Quickflow.Core.Entities;
 using Quickflow.Core.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,16 +20,15 @@ namespace Quickflow.UnitTest
 
         public TestEssential()
         {
-            WorkflowEngine.ContentRootPath = $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\..";
-            WorkflowEngine.Assembles = new string[] { "Quickflow.Core", "Quickflow.ActivityRepository" };
+            Database.ContentRootPath = $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\..";
+            Database.Assemblies = new string[] { "Quickflow.Core", "Quickflow.ActivityRepository", "Quickflow.UnitTest" };
 
             dc = new Database();
 
-            dc.BindDbContext<IDbRecord, DbContext4Sqlite>(new DatabaseBind
+            dc.BindDbContext<IDbRecord, DbContext4SqlServer>(new DatabaseBind
             {
-                MasterConnection = new SqliteConnection($"Data Source={WorkflowEngine.ContentRootPath}\\App_Data\\bootkit.db"),
-                CreateDbIfNotExist = true,
-                AssemblyNames = WorkflowEngine.Assembles
+                MasterConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Quickflow;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"),
+                CreateDbIfNotExist = true
             });
 
             dc.DbTran(() => InitTestData());
@@ -36,7 +36,7 @@ namespace Quickflow.UnitTest
 
         private void InitTestData()
         {
-            Directory.GetFiles(WorkflowEngine.ContentRootPath + "\\App_Data\\DbInitializer", "*.Workflows.json")
+            Directory.GetFiles(Database.ContentRootPath + "\\App_Data\\DbInitializer", "*.Workflows.json")
                 .ToList()
                 .ForEach(path =>
                 {

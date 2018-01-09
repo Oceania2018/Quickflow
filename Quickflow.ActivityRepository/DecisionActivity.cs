@@ -1,5 +1,6 @@
 ﻿using EntityFrameworkCore.BootKit;
 using ExpressionEvaluator;
+using Newtonsoft.Json.Linq;
 using Quickflow.Core.Entities;
 using Quickflow.Core.Interfacess;
 using Quickflow.Core.Utilities;
@@ -23,7 +24,7 @@ namespace Quickflow.ActivityRepository
                 var option = activity.Options[i];
 
                 var cc = new CompiledExpression() { StringToParse = option.Value };
-                object input = activity.Input.Data.ToObject<ExpandoObject>();
+                object input = JObject.FromObject(activity.Input.Data).ToObject<ExpandoObject>();
                 cc.RegisterType("Input", input);
                 cc.RegisterDefaultTypes();
                 decision = (bool)cc.Eval();

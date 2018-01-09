@@ -1,4 +1,6 @@
-﻿using EntityFrameworkCore.BootKit;
+﻿using DotNetToolkit;
+using EntityFrameworkCore.BootKit;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Quickflow.Core;
@@ -8,6 +10,7 @@ using Quickflow.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,15 +21,16 @@ namespace Quickflow.ActivityRepository
         public async Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {
             string json = "{" + activity.GetOptionValue("values") + "}";
-            var values = JObject.FromObject(JsonConvert.DeserializeObject(json));
+            var values = JObject.Parse(json);
 
-            var dic = (activity.Input.Data as JObject).ToDictionary();
+            var dic = JObject.FromObject(activity.Input.Data).ToDictionary();
 
-            values.Properties().ToList().ForEach(p => dic[p.Name] = p.Value);
+            dic.ToList().ForEach(p => values[p.Key] = JToken.FromObject(p.Value));
 
             var paramters = activity.GetOptionValue("params");
+            var createIfNotExists = bool.Parse(activity.GetOptionValue("createIfNotExists") ?? "false");
 
-            (activity.Input.Data as JObject).Properties()
+            JObject.FromObject(activity.Input.Data).Properties()
                 .ToList()
                 .ForEach(d =>
                 {
@@ -36,17 +40,25 @@ namespace Quickflow.ActivityRepository
                         dic.Remove(d.Name);
                     }
                 });
-
+            
             var patch = new DbPatchModel
             {
                 Table = activity.GetOptionValue("table"),
                 Where = activity.GetOptionValue("where"),
                 Params = new object[] { paramters },
-                Id = activity.GetOptionValue("id"),
                 Values = dic
             };
-            
-            dc.Patch<IDbRecord>(patch);
+
+            // check if exists
+            if (dc.Table(patch.Table).Any(patch.Where, patch.Params))
+            {
+                dc.Patch<IDbRecord>(patch);
+            }
+            else
+            {
+                var tableType = TypeHelper.GetType(patch.Table, Database.Assemblies);
+                dc.Add(values.ToObject(tableType));
+            }
 
             activity.Output = activity.Input;
         }

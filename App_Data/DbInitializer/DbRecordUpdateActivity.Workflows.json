@@ -1,0 +1,25 @@
+﻿{
+  "workflows": [
+    {
+      "id": "e256fef6-b0fa-4b25-85ef-635444d3826d",
+      "name": "DbRecordUpdateActivity Test",
+      "description": "For test purpose only",
+      "rootActivityId": "ccf3dc2c-9746-4d95-a7cf-31e3a11c20d9",
+      "activities": [
+        {
+          "id": "ccf3dc2c-9746-4d95-a7cf-31e3a11c20d9",
+          "activityName": "DbRecordUpdateActivity",
+          "configuration": {
+            "table": "DataTable4Test",
+            "where": "Name=@0",
+            "createIfNotExists": true,
+            "params": [ "{Name}" ],
+            "values": {
+              "Name": "Haiping"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,5 @@
-﻿using EntityFrameworkCore.BootKit;
+﻿using DotNetToolkit;
+using EntityFrameworkCore.BootKit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -16,9 +17,6 @@ namespace Quickflow.Core
     {
         public String WorkflowId { get; set; }
         public String TransactionId { get; set; }
-        public static String[] Assembles { get; set; }
-        public static IConfiguration Configuration { get; set; }
-        public static string ContentRootPath { get; set; }
 
         public async Task<ActivityResult> Run<TInput>(Database dc, TInput input)
         {
@@ -42,7 +40,7 @@ namespace Quickflow.Core
 
             ConstructActivityLinkedlist(workflow);
 
-            var types = TypeHelper.GetClassesWithInterface<IWorkflowActivity>(Assembles);
+            var types = TypeHelper.GetClassesWithInterface<IWorkflowActivity>(Database.Assemblies);
 
             ActivityInWorkflow preActivity = null;
             ActivityInWorkflow activity = workflow.Activities.First();

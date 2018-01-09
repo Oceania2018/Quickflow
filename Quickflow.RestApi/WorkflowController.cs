@@ -23,26 +23,24 @@ namespace Quickflow.RestApi
         {
             dc = new Database();
 
-            string db = WorkflowEngine.Configuration.GetSection("Database:Default").Value;
-            string connectionString = WorkflowEngine.Configuration.GetSection("Database:ConnectionStrings")[db];
+            string db = Database.Configuration.GetSection("Database:Default").Value;
+            string connectionString = Database.Configuration.GetSection("Database:ConnectionStrings")[db];
 
             if (db.Equals("SqlServer"))
             {
                 dc.BindDbContext<IDbRecord, DbContext4SqlServer>(new DatabaseBind
                 {
                     MasterConnection = new SqlConnection(connectionString),
-                    CreateDbIfNotExist = true,
-                    AssemblyNames = WorkflowEngine.Assembles
+                    CreateDbIfNotExist = true
                 });
             }
             else if (db.Equals("Sqlite"))
             {
-                connectionString = connectionString.Replace("|DataDirectory|\\", WorkflowEngine.ContentRootPath + "\\App_Data\\");
+                connectionString = connectionString.Replace("|DataDirectory|\\", Database.ContentRootPath + "\\App_Data\\");
                 dc.BindDbContext<IDbRecord, DbContext4Sqlite>(new DatabaseBind
                 {
                     MasterConnection = new SqliteConnection(connectionString),
-                    CreateDbIfNotExist = true,
-                    AssemblyNames = WorkflowEngine.Assembles
+                    CreateDbIfNotExist = true
                 });
             }
             else if (db.Equals("MySql"))
@@ -50,15 +48,7 @@ namespace Quickflow.RestApi
                 dc.BindDbContext<IDbRecord, DbContext4MySql>(new DatabaseBind
                 {
                     MasterConnection = new MySqlConnection(connectionString),
-                    CreateDbIfNotExist = true,
-                    AssemblyNames = WorkflowEngine.Assembles
-                });
-            }
-            else if (db.Equals("InMemory"))
-            {
-                dc.BindDbContext<IDbRecord, DbContext4Memory>(new DatabaseBind
-                {
-                    AssemblyNames = WorkflowEngine.Assembles
+                    CreateDbIfNotExist = true
                 });
             }
         }

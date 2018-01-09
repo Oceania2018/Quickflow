@@ -31,7 +31,7 @@ namespace Quickflow.ActivityRepository
             // add url segment
             resource.Split("/").ToList().ForEach(seg =>
             {
-                if (seg.StartsWith('{'))
+                if (!String.IsNullOrEmpty(seg) && seg.StartsWith('{'))
                 {
                     string name = seg.Substring(1, seg.Length - 2);
                     request.AddUrlSegment(name, jObject[name]);
@@ -42,8 +42,18 @@ namespace Quickflow.ActivityRepository
             querys.Split("&").ToList().ForEach(seg =>
             {
                 var query = seg.Split("=");
-                string name = query[1].Substring(1, query[1].Length - 2);
-                request.AddQueryParameter(query[0], jObject[name].ToString());
+                if (query.Length == 2)
+                {
+                    if (query[1].StartsWith('{'))
+                    {
+                        string name = query[1].Substring(1, query[1].Length - 2);
+                        request.AddQueryParameter(query[0], jObject[name].ToString());
+                    }
+                    else
+                    {
+                        request.AddQueryParameter(query[0], query[1]);
+                    }
+                }
             });
 
             request.AddParameter("application/json; charset=utf-8", json, ParameterType.RequestBody);
