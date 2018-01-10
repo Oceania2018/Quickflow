@@ -11,6 +11,7 @@ using System.Linq.Dynamic.Core;
 using ExpressionEvaluator;
 using System.Collections;
 using Newtonsoft.Json.Linq;
+using DotNetToolkit;
 
 namespace Quickflow.UnitTest
 {
@@ -29,7 +30,7 @@ namespace Quickflow.UnitTest
             dc.DbTran(async () =>
             {
                 var result = await wf.Run(dc, new { Name = "Haiping Chen" });
-                Assert.IsTrue(JObject.FromObject(result.Data)["Name"].ToString() == "Haiping Chen");
+                Assert.IsTrue(result.Data.GetValue("Name").ToString() == "Haiping Chen");
             });
         }
 
@@ -58,9 +59,8 @@ namespace Quickflow.UnitTest
             };
 
             var result = wf.Run(dc, new { FullName = "Haiping Chen", Email = "haiping008@gmail.com" });
-            var jObject = JObject.FromObject(result.Result.Data);
 
-            Assert.IsTrue(jObject["ToAddresses"].ToString() == "haiping008@gmail.com");
+            Assert.IsTrue(result.Result.Data.GetValue("ToAddresses").ToString() == "haiping008@gmail.com");
         }
 
         [TestMethod]
@@ -74,11 +74,9 @@ namespace Quickflow.UnitTest
             
             dc.DbTran(() =>
             {
-                var result = wf.Run(dc, new { Name = "Haiping", UpdatedTime = DateTime.UtcNow });
+                var result = wf.Run(dc, new { Name = "Haiping", Total = new Random().Next(1000), UpdatedTime = DateTime.Parse("1/10/2018 2:21:30 PM") });
 
-                var jObject = JObject.FromObject(result.Result.Data);
-
-                Assert.IsTrue(jObject["Name"].ToString() == "Haiping");
+                Assert.IsTrue(result.Result.Data.GetValue("Name").ToString() == "Haiping");
             });
 
         }

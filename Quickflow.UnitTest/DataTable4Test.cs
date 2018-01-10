@@ -9,6 +9,8 @@ namespace Quickflow.UnitTest
     {
         public String Name { get; set; }
 
-        public DateTime UpdatedTime { get; set; }
+        public Int32 Total { get; set; }
+
+        public Decimal? Amount { get; set; }
     }
 }

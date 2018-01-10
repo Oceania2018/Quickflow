@@ -11,9 +11,8 @@
           "activityName": "DbRecordUpdateActivity",
           "configuration": {
             "table": "DataTable4Test",
-            "where": "Name=@0",
+            "where": "Name={Name} and UpdatedTime={UpdatedTime}",
             "createIfNotExists": true,
-            "params": [ "{Name}" ],
             "values": {
               "Name": "Haiping"
             }

@@ -27,27 +27,33 @@ namespace Quickflow.ActivityRepository
 
             dic.ToList().ForEach(p => values[p.Key] = JToken.FromObject(p.Value));
 
-            var paramters = activity.GetOptionValue("params");
+            var paramters = new List<Object>();
             var createIfNotExists = bool.Parse(activity.GetOptionValue("createIfNotExists") ?? "false");
+
+            var patch = new DbPatchModel
+            {
+                Table = activity.GetOptionValue("table"),
+                Where = activity.GetOptionValue("where"),
+                Values = dic
+            };
+
+            var tableType = TypeHelper.GetType(patch.Table, Database.Assemblies);
 
             JObject.FromObject(activity.Input.Data).Properties()
                 .ToList()
                 .ForEach(d =>
                 {
-                    if (paramters.StartsWith("{"))
+                    if(patch.Where.Contains("{" + d.Name + "}"))
                     {
-                        paramters = paramters.Replace("{" + d.Name + "}", d.Value.ToString());
-                        dic.Remove(d.Name);
+                        patch.Where = patch.Where.Replace("{" + d.Name + "}", "@" + paramters.Count());
+                        var propertType = tableType.GetProperty(d.Name).PropertyType;
+                        paramters.Add(d.Value.ToObject(propertType));
                     }
                 });
-            
-            var patch = new DbPatchModel
-            {
-                Table = activity.GetOptionValue("table"),
-                Where = activity.GetOptionValue("where"),
-                Params = new object[] { paramters },
-                Values = dic
-            };
+
+            //paramters.RemoveAt(1);
+            patch.Params = paramters.ToArray();
+            //patch.Where = "Name=@0";
 
             // check if exists
             if (dc.Table(patch.Table).Any(patch.Where, patch.Params))
@@ -56,7 +62,6 @@ namespace Quickflow.ActivityRepository
             }
             else
             {
-                var tableType = TypeHelper.GetType(patch.Table, Database.Assemblies);
                 dc.Add(values.ToObject(tableType));
             }
 
