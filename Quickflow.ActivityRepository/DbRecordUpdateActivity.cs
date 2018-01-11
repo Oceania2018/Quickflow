@@ -51,9 +51,7 @@ namespace Quickflow.ActivityRepository
                     }
                 });
 
-            //paramters.RemoveAt(1);
             patch.Params = paramters.ToArray();
-            //patch.Where = "Name=@0";
 
             // check if exists
             if (dc.Table(patch.Table).Any(patch.Where, patch.Params))

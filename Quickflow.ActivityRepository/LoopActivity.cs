@@ -13,6 +13,8 @@ namespace Quickflow.ActivityRepository
 {
     public class LoopActivity : IWorkflowActivity
     {
+        private static Dictionary<String, List<Object>> OutputData = new Dictionary<string, List<Object>>();
+
         public Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {
             string startActivityId = activity.GetOptionValue("startActivityId");
@@ -20,6 +22,17 @@ namespace Quickflow.ActivityRepository
 
             // reset input
             activity.Input = activity.OriginInput;
+
+            // track output
+            if (!OutputData.ContainsKey(activity.Id))
+            {
+                OutputData[activity.Id] = new List<Object>();
+            }
+
+            if(activity.Flag > 0)
+            {
+                OutputData[activity.Id].Add(preActivity.Output.Data);
+            }
 
             if (activity.Input.Data.GetType() == typeof(JArray))
             {
@@ -40,11 +53,12 @@ namespace Quickflow.ActivityRepository
                 // return to main flow
                 else
                 {
-                    Console.WriteLine($"loop ended");
+                    Console.WriteLine($"looped total {activity.Flag}");
 
                     activity.Flag = 0;
                     activity.NextActivityId = activity.OriginNextActivityId;
-                    activity.Output = activity.Input;
+                    activity.Output.Data = OutputData[activity.Id];
+                    OutputData.Remove(activity.Id);
                 }
             }
 
