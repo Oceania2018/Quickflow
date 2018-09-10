@@ -291,3 +291,4 @@ __pycache__/
 /App_Data/quickflow.db
 /Quickflow.UnitTest/App_Data/quickflow.db
 /App_Data/bootkit.db
+/Quickflow.RestApi/netstandard2.0

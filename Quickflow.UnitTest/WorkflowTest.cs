@@ -60,7 +60,7 @@ namespace Quickflow.UnitTest
 
             var result = wf.Run(dc, new { FullName = "Haiping Chen", Email = "haiping008@gmail.com" });
 
-            Assert.IsTrue(result.Result.Data.GetValue("ToAddresses").ToString() == "haiping008@gmail.com");
+            Assert.IsTrue(JObject.FromObject(result.Result.Data)["ToAddresses"].ToString() == "haiping008@gmail.com");
         }
 
         [TestMethod]

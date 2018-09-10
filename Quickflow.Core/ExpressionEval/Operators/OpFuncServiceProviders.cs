@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq.Expressions;
 using ExpressionEvaluator.Tokens;
-using Microsoft.CSharp.RuntimeBinder;
 using System.Linq;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace ExpressionEvaluator.Operators
 {

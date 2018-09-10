@@ -40,7 +40,7 @@ namespace Quickflow.Core
 
             ConstructActivityLinkedlist(workflow);
 
-            var types = TypeHelper.GetClassesWithInterface<IWorkflowActivity>(Database.Assemblies);
+            var types = TypeHelper.GetClassesWithInterface<IWorkflowActivity>(AppDomain.CurrentDomain.GetData("Assemblies").ToString());
 
             ActivityInWorkflow preActivity = null;
             ActivityInWorkflow activity = workflow.Activities.First();

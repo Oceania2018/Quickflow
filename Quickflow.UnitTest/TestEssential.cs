@@ -20,8 +20,8 @@ namespace Quickflow.UnitTest
 
         public TestEssential()
         {
-            Database.ContentRootPath = $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\..";
-            Database.Assemblies = new string[] { "Quickflow.Core", "Quickflow.ActivityRepository", "Quickflow.UnitTest" };
+            AppDomain.CurrentDomain.SetData("ContentRootPath", $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\..");
+            AppDomain.CurrentDomain.SetData("Assemblies", new string[] { "Quickflow.Core", "Quickflow.ActivityRepository", "Quickflow.UnitTest" });
 
             dc = new Database();
 
@@ -36,7 +36,7 @@ namespace Quickflow.UnitTest
 
         private void InitTestData()
         {
-            Directory.GetFiles(Database.ContentRootPath + "\\App_Data\\DbInitializer", "*.Workflows.json")
+            Directory.GetFiles(AppDomain.CurrentDomain.GetData("ContentRootPath").ToString() + "\\App_Data\\DbInitializer", "*.Workflows.json")
                 .ToList()
                 .ForEach(path =>
                 {

@@ -1,0 +1,19 @@
+﻿{
+  "Swagger": {
+    "Contact": {
+      "Email": "haiping008@gmail.com",
+      "Name": "Haiping Chen",
+      "Url": "https://github.com/Oceania2018"
+    },
+    "Description": "Quickflow is a workflow engine written in C# .NET Core",
+    "Endpoint": "/swagger/v1/swagger.json",
+    "License": {
+      "Name": "Apache License 2.0",
+      "Url": "https://github.com/Oceania2018/Quickflow/blob/master/LICENSE"
+    },
+    "TermsOfService": "http://www.apache.org/licenses/",
+    "Title": "Quickflow API",
+    "Version": "v1",
+    "Stylesheet": "/swagger.css"
+  }
+}

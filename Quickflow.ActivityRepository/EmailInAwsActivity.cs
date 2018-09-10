@@ -20,6 +20,7 @@ namespace Quickflow.ActivityRepository
     {
         public async Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {
+            var configuration = (IConfiguration)AppDomain.CurrentDomain.GetData("Configuration");
             EmailRequestModel model = new EmailRequestModel();
 
             model.Subject = activity.GetOptionValue("Subject");
@@ -32,7 +33,7 @@ namespace Quickflow.ActivityRepository
             if (!String.IsNullOrEmpty(model.Template))
             {
                 var engine = new RazorLightEngineBuilder()
-                  .UseFilesystemProject(Database.ContentRootPath + "\\App_Data")
+                  .UseFilesystemProject(AppDomain.CurrentDomain.GetData("ContentRootPath").ToString() + "\\App_Data")
                   .UseMemoryCachingProvider()
                   .Build();
 
@@ -41,9 +42,9 @@ namespace Quickflow.ActivityRepository
 
             var ses = new SesEmailConfig
             {
-                VerifiedEmail = Database.Configuration.GetSection("AWS:SESVerifiedEmail").Value,
-                AWSSecretKey = Database.Configuration.GetSection("AWS:AWSSecretKey").Value,
-                AWSAccessKey = Database.Configuration.GetSection("AWS:AWSAccessKey").Value
+                VerifiedEmail = configuration.GetSection("AWS:SESVerifiedEmail").Value,
+                AWSSecretKey = configuration.GetSection("AWS:AWSSecretKey").Value,
+                AWSAccessKey = configuration.GetSection("AWS:AWSAccessKey").Value
             };
 
             activity.Output.Data = await Send(model, ses);

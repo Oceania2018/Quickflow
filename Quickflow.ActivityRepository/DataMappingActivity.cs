@@ -23,7 +23,7 @@ namespace Quickflow.ActivityRepository
             if (engine == null)
             {
                 engine = new RazorLightEngineBuilder()
-                  .UseFilesystemProject(Database.ContentRootPath + "\\App_Data")
+                  .UseFilesystemProject(AppDomain.CurrentDomain.GetData("ContentRootPath").ToString() + "\\App_Data")
                   .UseMemoryCachingProvider()
                   .Build();
             }

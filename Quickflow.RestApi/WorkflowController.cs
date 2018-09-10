@@ -1,6 +1,7 @@
 ﻿using EntityFrameworkCore.BootKit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 using Quickflow.Core;
@@ -21,10 +22,12 @@ namespace Quickflow.RestApi
         
         public WorkflowController()
         {
+            var configuration = (IConfiguration)AppDomain.CurrentDomain.GetData("Assemblies");
+
             dc = new Database();
 
-            string db = Database.Configuration.GetSection("Database:Default").Value;
-            string connectionString = Database.Configuration.GetSection("Database:ConnectionStrings")[db];
+            string db = configuration.GetSection("Database:Default").Value;
+            string connectionString = configuration.GetSection("Database:ConnectionStrings")[db];
 
             if (db.Equals("SqlServer"))
             {
@@ -36,7 +39,7 @@ namespace Quickflow.RestApi
             }
             else if (db.Equals("Sqlite"))
             {
-                connectionString = connectionString.Replace("|DataDirectory|\\", Database.ContentRootPath + "\\App_Data\\");
+                connectionString = connectionString.Replace("|DataDirectory|\\", AppDomain.CurrentDomain.GetData("ContentRootPath").ToString() + "\\App_Data\\");
                 dc.BindDbContext<IDbRecord, DbContext4Sqlite>(new DatabaseBind
                 {
                     MasterConnection = new SqliteConnection(connectionString),

@@ -29,9 +29,9 @@ namespace Quickflow.ActivityRepository
             var jObject = JObject.FromObject(activity.Input.Data);
 
             // add url segment
-            resource.Split("/").ToList().ForEach(seg =>
+            resource.Split('/').ToList().ForEach(seg =>
             {
-                if (!String.IsNullOrEmpty(seg) && seg.StartsWith('{'))
+                if (!String.IsNullOrEmpty(seg) && seg.StartsWith("{"))
                 {
                     string name = seg.Substring(1, seg.Length - 2);
                     request.AddUrlSegment(name, jObject[name]);
@@ -39,12 +39,12 @@ namespace Quickflow.ActivityRepository
             });
 
             // add query parameter
-            querys.Split("&").ToList().ForEach(seg =>
+            querys.Split('&').ToList().ForEach(seg =>
             {
-                var query = seg.Split("=");
+                var query = seg.Split('=');
                 if (query.Length == 2)
                 {
-                    if (query[1].StartsWith('{'))
+                    if (query[1].StartsWith("{"))
                     {
                         string name = query[1].Substring(1, query[1].Length - 2);
                         request.AddQueryParameter(query[0], jObject[name].ToString());
@@ -58,7 +58,7 @@ namespace Quickflow.ActivityRepository
 
             request.AddParameter("application/json; charset=utf-8", json, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
-            request.Method = Enum.Parse<Method>(method);
+            request.Method = (Method)Enum.Parse(typeof(Method), method);
 
             var client = new RestClient(baseUrl);
             IRestResponse response = client.Execute(request);

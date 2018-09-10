@@ -1,0 +1,10 @@
+{
+  "Database": {
+    "Default": "Sqlite",
+    "ConnectionStrings": {
+      "InMemory": "DataSource=:memory:",
+      "Sqlite": "Data Source=|DataDirectory|Quickflow.db;",
+      "SqlServer": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Quickflow;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+    }
+  }
+}
