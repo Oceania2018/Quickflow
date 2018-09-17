@@ -29,7 +29,7 @@ namespace Quickflow.WebHost
                         config.AddJsonFile(setting, optional: false, reloadOnChange: true);
                     });
                 })
-                .UseUrls("http://0.0.0.0:8750")
+                .UseUrls("http://0.0.0.0:3112")
                 .UseStartup<Startup>()
                 .Build();
     }

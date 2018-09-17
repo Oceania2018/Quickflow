@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quickflow.RestApi", "Quickf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quickflow.ActivityRepository", "Quickflow.ActivityRepository\Quickflow.ActivityRepository.csproj", "{282DF88F-42D7-40DC-9D68-FEFDA961DD0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickflow.WebHost", "Quickflow.WebHost\Quickflow.WebHost.csproj", "{B9B972DA-4D9C-4895-B260-D7FF5906AE6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quickflow.WebHost", "Quickflow.WebHost\Quickflow.WebHost.csproj", "{B9B972DA-4D9C-4895-B260-D7FF5906AE6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

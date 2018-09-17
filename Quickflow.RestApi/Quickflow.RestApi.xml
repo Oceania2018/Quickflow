@@ -4,5 +4,18 @@
         <name>Quickflow.RestApi</name>
     </assembly>
     <members>
+        <member name="T:Quickflow.RestApi.WorkflowController">
+            <summary>
+            Workflow controller
+            </summary>
+        </member>
+        <member name="M:Quickflow.RestApi.WorkflowController.Run(System.String,Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            Run workflow
+            </summary>
+            <param name="workflowId"></param>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

@@ -37,7 +37,7 @@ namespace Quickflow.ActivityRepository
                 Values = dic
             };
 
-            var tableType = TypeHelper.GetType(patch.Table, AppDomain.CurrentDomain.GetData("Assemblies").ToString().Split(','));
+            var tableType = TypeHelper.GetType(patch.Table, (string[])AppDomain.CurrentDomain.GetData("Assemblies"));
 
             JObject.FromObject(activity.Input.Data).Properties()
                 .ToList()

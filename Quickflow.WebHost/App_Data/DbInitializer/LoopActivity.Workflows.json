@@ -42,7 +42,7 @@
           "id": "51f626e3-340c-4efb-9ea8-9bd33f990f41",
           "activityName": "DbRecordUpdateActivity",
           "configuration": {
-            "table": "Currency",
+            "table": "DataTable4Test",
             "where": "Symbol=={Symbol}",
             "createIfNotExists": true,
             "values": {

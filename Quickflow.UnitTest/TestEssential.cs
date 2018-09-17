@@ -20,7 +20,7 @@ namespace Quickflow.UnitTest
 
         public TestEssential()
         {
-            AppDomain.CurrentDomain.SetData("ContentRootPath", $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\..");
+            AppDomain.CurrentDomain.SetData("ContentRootPath", Path.GetFullPath($"{Directory.GetCurrentDirectory()}\\..\\..\\..\\..\\Quickflow.WebHost\\"));
             AppDomain.CurrentDomain.SetData("Assemblies", new string[] { "Quickflow.Core", "Quickflow.ActivityRepository", "Quickflow.UnitTest" });
 
             dc = new Database();

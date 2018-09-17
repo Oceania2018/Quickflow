@@ -100,15 +100,22 @@ namespace Quickflow.WebHost
 
             app.UseMvc();
 
-            AppDomain.CurrentDomain.SetData("DataPath", Path.Combine(env.ContentRootPath, "App_Data"));
+            AppDomain.CurrentDomain.SetData("DataPath", Path.GetFullPath(env.ContentRootPath + $"{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}"));
             AppDomain.CurrentDomain.SetData("Configuration", Configuration);
             AppDomain.CurrentDomain.SetData("ContentRootPath", env.ContentRootPath);
             AppDomain.CurrentDomain.SetData("Assemblies", Configuration.GetValue<String>("Assemblies").Split(','));
 
-            /*InitializationLoader loader = new InitializationLoader();
+            // load dll dynamic
+            /*Assembly library = Assembly.LoadFile(Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Quickflow.ActivityRepository.dll"));
+            Type myClass = (from type in library.GetExportedTypes()
+                where typeof(IMyInterface).IsAssignableFrom(type)
+                select type)
+                .Single();*/
+
+            InitializationLoader loader = new InitializationLoader();
             loader.Env = env;
             loader.Config = Configuration;
-            loader.Load();*/
+            loader.Load();
         }
     }
 }

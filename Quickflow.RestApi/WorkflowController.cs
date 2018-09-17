@@ -11,54 +11,27 @@ using System.Threading.Tasks;
 
 namespace Quickflow.RestApi
 {
+    /// <summary>
+    /// Workflow controller
+    /// </summary>
 #if !DEBUG
     [Authorize]
 #endif
     [Produces("application/json")]
     [Route("qf/[controller]")]
-    public abstract class WorkflowController : ControllerBase
+    public class WorkflowController : ControllerBase
     {
-        protected Database dc { get; set; }
-        
-        public WorkflowController()
-        {
-            var configuration = (IConfiguration)AppDomain.CurrentDomain.GetData("Assemblies");
-
-            dc = new Database();
-
-            string db = configuration.GetSection("Database:Default").Value;
-            string connectionString = configuration.GetSection("Database:ConnectionStrings")[db];
-
-            if (db.Equals("SqlServer"))
-            {
-                dc.BindDbContext<IDbRecord, DbContext4SqlServer>(new DatabaseBind
-                {
-                    MasterConnection = new SqlConnection(connectionString),
-                    CreateDbIfNotExist = true
-                });
-            }
-            else if (db.Equals("Sqlite"))
-            {
-                connectionString = connectionString.Replace("|DataDirectory|\\", AppDomain.CurrentDomain.GetData("ContentRootPath").ToString() + "\\App_Data\\");
-                dc.BindDbContext<IDbRecord, DbContext4Sqlite>(new DatabaseBind
-                {
-                    MasterConnection = new SqliteConnection(connectionString),
-                    CreateDbIfNotExist = true
-                });
-            }
-            else if (db.Equals("MySql"))
-            {
-                dc.BindDbContext<IDbRecord, DbContext4MySql>(new DatabaseBind
-                {
-                    MasterConnection = new MySqlConnection(connectionString),
-                    CreateDbIfNotExist = true
-                });
-            }
-        }
-
+        /// <summary>
+        /// Run workflow
+        /// </summary>
+        /// <param name="workflowId"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost("run/{workflowId}")]
         public async Task<string> Run([FromRoute] string workflowId, [FromBody] JObject data)
         {
+            var dc = new DefaultDataContextLoader().GetDefaultDc();
+
             var wf = new WorkflowEngine
             {
                 WorkflowId = workflowId,

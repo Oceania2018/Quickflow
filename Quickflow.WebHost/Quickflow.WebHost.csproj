@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="3.0.0" />
@@ -24,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Quickflow.ActivityRepository\Quickflow.ActivityRepository.csproj" />
     <ProjectReference Include="..\Quickflow.RestApi\Quickflow.RestApi.csproj" />
   </ItemGroup>
 

@@ -12,6 +12,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="netstandard2.0\**" />
+    <EmbeddedResource Remove="netstandard2.0\**" />
+    <None Remove="netstandard2.0\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Quickflow.RestApi.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.2" />
   </ItemGroup>
 

@@ -1,6 +1,6 @@
 {
   "Database": {
-    "Default": "Sqlite",
+    "Default": "SqlServer",
     "ConnectionStrings": {
       "InMemory": "DataSource=:memory:",
       "Sqlite": "Data Source=|DataDirectory|Quickflow.db;",

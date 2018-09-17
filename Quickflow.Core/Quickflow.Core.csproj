@@ -17,6 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Colorful.Console" Version="1.2.9" />
     <PackageReference Include="DotNetToolkit" Version="1.6.0" />
     <PackageReference Include="EntityFrameworkCore.BootKit" Version="1.9.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />

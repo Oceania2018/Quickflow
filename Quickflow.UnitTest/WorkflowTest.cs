@@ -80,5 +80,21 @@ namespace Quickflow.UnitTest
             });
 
         }
+
+        [TestMethod]
+        public void LoopActivityTest()
+        {
+            var wf = new WorkflowEngine
+            {
+                WorkflowId = "f0d6bf5d-359a-4903-97ad-2fa9bd8b2997",
+                TransactionId = Guid.NewGuid().ToString()
+            };
+
+            dc.DbTran(() =>
+            {
+                var result = wf.Run(dc, new { });
+            });
+
+        }
     }
 }

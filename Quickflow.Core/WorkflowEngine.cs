@@ -8,8 +8,11 @@ using Quickflow.Core.Interfacess;
 using Quickflow.Core.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using Console = Colorful.Console;
 
 namespace Quickflow.Core
 {
@@ -20,7 +23,8 @@ namespace Quickflow.Core
 
         public async Task<ActivityResult> Run<TInput>(Database dc, TInput input)
         {
-            DateTime dtStart = DateTime.UtcNow;
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
 
             var workflow = dc.Table<Workflow>()
                             .Include(x => x.Activities).ThenInclude(x => x.Options)
@@ -34,24 +38,30 @@ namespace Quickflow.Core
 
             Console.WriteLine("");
             Console.WriteLine("");
-            Console.WriteLine($"------ {workflow.Name.ToUpper()}, TRACEID: {TransactionId} ------");
+            var style = new Colorful.StyleSheet(Color.White);
+            style.AddStyle(TransactionId, Color.Green);
+            Console.WriteLineStyled($"------ {workflow.Name.ToUpper()}, TRACEID: {TransactionId} ------", style);
             Console.WriteLine($"{workflow.Description}");
             Console.WriteLine("");
 
             ConstructActivityLinkedlist(workflow);
 
-            var types = TypeHelper.GetClassesWithInterface<IWorkflowActivity>(AppDomain.CurrentDomain.GetData("Assemblies").ToString());
+            var types = TypeHelper.GetClassesWithInterface<IWorkflowActivity>((string[])AppDomain.CurrentDomain.GetData("Assemblies"));
 
             ActivityInWorkflow preActivity = null;
             ActivityInWorkflow activity = workflow.Activities.First();
             activity.Input = new ActivityResult { Data = input };
             
-            int step = 1;
+            int step = 0;
 
             while (activity != null)
             {
+                step++;
+
                 Console.WriteLine("");
-                Console.WriteLine($"--- STEP {step++}: {activity.ActivityName} ---");
+                style = new Colorful.StyleSheet(Color.White);
+                style.AddStyle($"STEP {step}", Color.Green);
+                Console.WriteLineStyled($"--- STEP {step}: {activity.ActivityName} ---", style);
 
                 Console.WriteLine($"{String.Join("", activity?.Options)}");
                 DateTime start = DateTime.Now;
@@ -111,7 +121,8 @@ namespace Quickflow.Core
                 }
             }
 
-            Console.WriteLine($"------ {workflow.Name.ToUpper()} Completed in {(DateTime.UtcNow - dtStart).TotalSeconds}s ------");
+            watch.Stop();
+            Console.WriteLine($"------ {workflow.Name.ToUpper()} Completed in {watch.ElapsedMilliseconds} ms ------");
 
             return preActivity?.Output;
         }
