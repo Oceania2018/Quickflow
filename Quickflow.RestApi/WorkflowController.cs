@@ -1,6 +1,8 @@
 ﻿using EntityFrameworkCore.BootKit;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
@@ -18,9 +20,16 @@ namespace Quickflow.RestApi
     [Authorize]
 #endif
     [Produces("application/json")]
-    [Route("qf/[controller]")]
+    [Route("qf")]
     public class WorkflowController : ControllerBase
     {
+        private readonly IHubClients hub;
+
+        public WorkflowController(IHubContext<SignalHub> hubContext)
+        {
+            hub = hubContext.Clients;
+        }
+
         /// <summary>
         /// Run workflow
         /// </summary>
@@ -36,6 +45,7 @@ namespace Quickflow.RestApi
             {
                 WorkflowId = workflowId,
                 TransactionId = Guid.NewGuid().ToString(),
+                SignalHub = hub
             };
 
             dc.Transaction<IDbRecord>(async delegate

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Quickflow.ActivityRepository
 {
-    public class DbRecordUpdateActivity : IWorkflowActivity
+    public class DbRecordUpdateActivity : EssentialActivity, IWorkflowActivity
     {
         public async Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {

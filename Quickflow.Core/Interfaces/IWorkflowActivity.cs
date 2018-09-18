@@ -1,4 +1,5 @@
 ﻿using EntityFrameworkCore.BootKit;
+using Microsoft.AspNetCore.SignalR;
 using Quickflow.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,8 @@ namespace Quickflow.Core.Interfacess
 {
     public interface IWorkflowActivity
     {
+        IHubClients SignalHub { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

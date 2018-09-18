@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Quickflow.ActivityRepository
 {
-    public class LoopActivity : IWorkflowActivity
+    public class LoopActivity : EssentialActivity, IWorkflowActivity
     {
         private static Dictionary<String, List<Object>> OutputData = new Dictionary<string, List<Object>>();
 

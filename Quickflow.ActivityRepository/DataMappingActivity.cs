@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Quickflow.ActivityRepository
 {
-    public class DataMappingActivity : IWorkflowActivity
+    public class DataMappingActivity : EssentialActivity, IWorkflowActivity
     {
         private static RazorLightEngine engine;
 

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Quickflow.ActivityRepository
 {
-    public class EmailInAwsActivity : IWorkflowActivity
+    public class EmailInAwsActivity : EssentialActivity, IWorkflowActivity
     {
         public async Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {

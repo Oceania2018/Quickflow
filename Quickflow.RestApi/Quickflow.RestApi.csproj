@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>

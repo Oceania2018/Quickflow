@@ -1,5 +1,6 @@
 ﻿using DotNetToolkit;
 using EntityFrameworkCore.BootKit;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -20,6 +21,10 @@ namespace Quickflow.Core
     {
         public String WorkflowId { get; set; }
         public String TransactionId { get; set; }
+
+        public bool Verbose { get; set; }
+
+        public IHubClients SignalHub { get; set; }
 
         public async Task<ActivityResult> Run<TInput>(Database dc, TInput input)
         {
@@ -84,6 +89,7 @@ namespace Quickflow.Core
 
                 try
                 {
+                    instance.SignalHub = SignalHub;
                     await instance.Run(dc, workflow, activity, preActivity);
                 }
                 catch (Exception ex)
@@ -104,8 +110,12 @@ namespace Quickflow.Core
 
                 Console.WriteLine("");
                 Console.WriteLine($"{activity.ActivityName} spent {(DateTime.Now - start).TotalMilliseconds}ms");
-                Console.WriteLine($"{JsonConvert.SerializeObject(activity.Output.Data)}");
 
+                if (Verbose)
+                {
+                    Console.WriteLine($"{JsonConvert.SerializeObject(activity.Output.Data)}");
+                }
+                
                 preActivity = activity;
                 activity = workflow.Activities.FirstOrDefault(x => x.Id == activity.NextActivityId);
 

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json.Serialization;
+using Quickflow.Core;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Quickflow.WebHost
@@ -56,6 +57,8 @@ namespace Quickflow.WebHost
                 var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Quickflow.RestApi.xml");
                 c.IncludeXmlComments(filePath);
             });
+
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -76,7 +79,7 @@ namespace Quickflow.WebHost
                 c.SupportedSubmitMethods(SubmitMethod.Get, SubmitMethod.Post, SubmitMethod.Put, SubmitMethod.Patch, SubmitMethod.Delete);
                 c.ShowExtensions();
                 c.SwaggerEndpoint(Configuration.GetValue<String>("Swagger:Endpoint"), info.Title);
-                c.RoutePrefix = String.Empty;
+                c.RoutePrefix = "api";
                 c.DocumentTitle = info.Title;
                 c.InjectStylesheet(Configuration.GetValue<String>("Swagger:Stylesheet"));
             });
@@ -97,6 +100,11 @@ namespace Quickflow.WebHost
                 await next.Invoke();
             });
             app.UseAuthentication();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<SignalHub>("/signalHub");
+            });
 
             app.UseMvc();
 

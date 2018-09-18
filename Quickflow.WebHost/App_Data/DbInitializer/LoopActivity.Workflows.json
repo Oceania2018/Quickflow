@@ -13,7 +13,7 @@
           "configuration": {
             "baseUrl": "https://api.coinmarketcap.com",
             "resource": "/v1/ticker/",
-            "query": "limit=0",
+            "query": "limit=1",
             "method": "get"
           }
         },
@@ -40,13 +40,9 @@
 
         {
           "id": "51f626e3-340c-4efb-9ea8-9bd33f990f41",
-          "activityName": "DbRecordUpdateActivity",
+          "activityName": "EmitCommandActivity",
           "configuration": {
-            "table": "DataTable4Test",
-            "where": "Symbol=={Symbol}",
-            "createIfNotExists": true,
-            "values": {
-            }
+            "command": "showMsg"
           }
         }
       ]

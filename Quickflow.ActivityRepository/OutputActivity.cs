@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Quickflow.ActivityRepository
 {
-    public class OutputActivity : IWorkflowActivity
+    public class OutputActivity : EssentialActivity, IWorkflowActivity
     {
         public async Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {

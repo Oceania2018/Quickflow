@@ -1,6 +1,7 @@
 ﻿using EntityFrameworkCore.BootKit;
 using ExpressionEvaluator;
 using Newtonsoft.Json.Linq;
+using Quickflow.Core;
 using Quickflow.Core.Entities;
 using Quickflow.Core.Interfacess;
 using Quickflow.Core.Utilities;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Quickflow.ActivityRepository
 {
-    public class DecisionActivity : IWorkflowActivity
+    public class DecisionActivity : EssentialActivity, IWorkflowActivity
     {
         public async Task Run(Database dc, Workflow wf, ActivityInWorkflow activity, ActivityInWorkflow preActivity)
         {

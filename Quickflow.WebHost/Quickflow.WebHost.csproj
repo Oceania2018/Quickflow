@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Quickflow.RestApi\Quickflow.RestApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\jquery\" />
+  </ItemGroup>
+
 </Project>
